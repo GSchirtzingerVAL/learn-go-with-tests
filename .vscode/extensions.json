@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "castrogusttavo.symbols",
+        "ms-azuretools.vscode-containers",
+        "ms-azuretools.vscode-docker",
+        "tombonnike.vscode-status-bar-format-toggle",
+        "github.vscode-pull-request-github",
+        "eamodio.gitlens",
+        "anysphere.remote-wsl",
+        "golang.go",
+        "davidanson.vscode-markdownlint",
+        "ms-vscode.powershell",
+        "christian-kohler.npm-intellisense"
+    ]
+}

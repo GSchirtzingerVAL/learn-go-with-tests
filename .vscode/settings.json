@@ -1,0 +1,57 @@
+{
+    "window.commandCenter": true,
+    "git.autofetch": true,
+    "workbench.colorTheme": "Default Dark Modern",
+    "editor.fontFamily": "Hack Nerd Font, Consolas, 'Courier New', monospace",
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        },
+        "Command Prompt": {
+            "path": [
+                "${env:windir}\\Sysnative\\cmd.exe",
+                "${env:windir}\\System32\\cmd.exe"
+            ],
+            "args": [],
+            "icon": "terminal-cmd"
+        },
+        "Git Bash": {
+            "source": "Git Bash"
+        },
+        "Ubuntu-24.04 (WSL)": {
+            "path": "C:\\windows\\System32\\wsl.exe",
+            "args": [
+                "-d",
+                "Ubuntu-24.04"
+            ]
+        }
+    },
+    "terminal.integrated.defaultProfile.windows": "Ubuntu-24.04 (WSL)",
+    "files.autoSave": "afterDelay",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "symbols.hidesExplorerArrows": false,
+    "workbench.iconTheme": "symbols",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "gopls": {
+        "ui.semanticTokens": true
+    },
+    "[go]": {
+        "editor.formatOnSave": true,
+    },
+    "go.lintTool": "golangci-lint-v2",
+    "go.lintFlags": [
+        "--path-mode=abs",
+        "--fast-only",
+    ],
+    "go.formatTool": "custom",
+    "go.alternateTools": {
+        "customFormatter": "golangci-lint-v2"
+    },
+    "go.formatFlags": [
+        "fmt",
+        "--stdin"
+    ]
+}
