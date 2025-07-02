@@ -10,6 +10,7 @@
         "golang.go",
         "davidanson.vscode-markdownlint",
         "ms-vscode.powershell",
-        "christian-kohler.npm-intellisense"
+        "christian-kohler.npm-intellisense",
+        "jock.svg"
     ]
 }
