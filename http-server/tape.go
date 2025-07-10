@@ -1,4 +1,4 @@
-package main
+package poker
 
 import (
 	"io"
@@ -7,6 +7,10 @@ import (
 
 type tape struct {
 	file *os.File
+}
+
+func NewTape(file *os.File) *tape {
+	return &tape{file}
 }
 
 func (t *tape) Write(p []byte) (n int, err error) {
