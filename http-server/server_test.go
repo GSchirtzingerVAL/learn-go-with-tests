@@ -10,11 +10,10 @@ import (
 	"testing"
 )
 
-// server_test.go
 type StubPlayerStore struct {
 	scores   map[string]int
 	winCalls []string
-	league   []Player
+	league   League
 }
 
 func (s *StubPlayerStore) GetPlayerScore(name string) int {
@@ -26,11 +25,10 @@ func (s *StubPlayerStore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
 
-func (s *StubPlayerStore) GetLeague() []Player {
+func (s *StubPlayerStore) GetLeague() League {
 	return s.league
 }
 
-// server_test.go
 func TestGETPlayers(t *testing.T) {
 	store := StubPlayerStore{
 		map[string]int{
@@ -72,7 +70,6 @@ func TestGETPlayers(t *testing.T) {
 	})
 }
 
-// server_test.go
 func TestStoreWins(t *testing.T) {
 	store := StubPlayerStore{
 		map[string]int{},
@@ -101,12 +98,10 @@ func TestStoreWins(t *testing.T) {
 	})
 }
 
-// server_test.go//server_test.go
 func TestLeague(t *testing.T) {
 
-	//server_test.go
 	t.Run("it returns the league table as JSON", func(t *testing.T) {
-		wantedLeague := []Player{
+		wantedLeague := League{
 			{"Cleo", 32},
 			{"Chris", 20},
 			{"Tiest", 14},
@@ -118,19 +113,16 @@ func TestLeague(t *testing.T) {
 		request := newLeagueRequest()
 		response := httptest.NewRecorder()
 
-		//server_test.go
-
 		server.ServeHTTP(response, request)
 
 		got := getLeagueFromResponse(t, response.Body)
 		assertStatus(t, response.Code, http.StatusOK)
 		assertContentType(t, response, jsonContentType)
 		assertLeague(t, got, wantedLeague)
-		//server_test.go
+
 	})
 }
 
-// server_test.go
 func assertContentType(t testing.TB, response *httptest.ResponseRecorder, want string) {
 	t.Helper()
 	if response.Result().Header.Get("content-type") != want {
@@ -138,8 +130,7 @@ func assertContentType(t testing.TB, response *httptest.ResponseRecorder, want s
 	}
 }
 
-// server_test.go
-func getLeagueFromResponse(t testing.TB, body io.Reader) (league []Player) {
+func getLeagueFromResponse(t testing.TB, body io.Reader) (league League) {
 	t.Helper()
 	err := json.NewDecoder(body).Decode(&league)
 
@@ -150,7 +141,7 @@ func getLeagueFromResponse(t testing.TB, body io.Reader) (league []Player) {
 	return
 }
 
-func assertLeague(t testing.TB, got, want []Player) {
+func assertLeague(t testing.TB, got, want League) {
 	t.Helper()
 	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got %v want %v", got, want)

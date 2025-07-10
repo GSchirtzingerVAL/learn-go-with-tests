@@ -7,20 +7,20 @@ import (
 	"strings"
 )
 
-// server.go
+
 type Player struct {
 	Name string
 	Wins int
 }
 
-// server.go
+
 type PlayerStore interface {
 	GetPlayerScore(name string) int
 	RecordWin(name string)
-	GetLeague() []Player
+	GetLeague() League
 }
 
-// server.go
+
 type PlayerServer struct {
 	store PlayerStore
 	http.Handler
@@ -40,7 +40,7 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 	return p
 }
 
-// server.go
+
 const jsonContentType = "application/json"
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {

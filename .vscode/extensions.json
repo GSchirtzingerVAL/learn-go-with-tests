@@ -11,6 +11,7 @@
         "davidanson.vscode-markdownlint",
         "ms-vscode.powershell",
         "christian-kohler.npm-intellisense",
-        "jock.svg"
+        "jock.svg",
+        "streetsidesoftware.code-spell-checker"
     ]
 }

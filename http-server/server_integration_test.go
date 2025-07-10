@@ -1,4 +1,4 @@
-// server_integration_test.go
+
 package main
 
 import (
@@ -7,9 +7,12 @@ import (
 	"testing"
 )
 
-// server_integration_test.go
+
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
-	store := NewInMemoryPlayerStore()
+	database, cleanDatabase := createTempFile(t, `[]`)
+	defer cleanDatabase()
+	store, err := NewFileSystemPlayerStore(database)
+	assertNoError(t, err)
 	server := NewPlayerServer(store)
 	player := "Pepper"
 
@@ -31,7 +34,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		assertStatus(t, response.Code, http.StatusOK)
 
 		got := getLeagueFromResponse(t, response.Body)
-		want := []Player{
+		want := League{
 			{"Pepper", 3},
 		}
 		assertLeague(t, got, want)
