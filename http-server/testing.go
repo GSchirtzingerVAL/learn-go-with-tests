@@ -1,6 +1,10 @@
 package poker
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+	"time"
+)
 
 type StubPlayerStore struct {
 	scores   map[string]int
@@ -41,4 +45,43 @@ func AssertPlayerWin(t testing.TB, store *StubPlayerStore, winner string) {
 	}
 }
 
-// todo for you - the rest of the helpers
+type ScheduledAlert struct {
+	at     time.Duration
+	amount int
+}
+
+func NewScheduledAlert(at time.Duration, amount int) ScheduledAlert {
+	return ScheduledAlert{at, amount}
+}
+
+func (s ScheduledAlert) String() string {
+	return fmt.Sprintf("%d chips at %v", s.amount, s.at)
+}
+
+type SpyBlindAlerter struct {
+	alerts []ScheduledAlert
+}
+
+func (s *SpyBlindAlerter) ScheduleAlertAt(at time.Duration, amount int) {
+	s.alerts = append(s.alerts, ScheduledAlert{at, amount})
+}
+
+func AssertScheduledAlert(t testing.TB, got, want ScheduledAlert) {
+	t.Helper()
+
+	if got != want {
+		t.Errorf("got %+v, want %+v", got, want)
+	}
+}
+
+func AssertAlerts(t testing.TB, blindAlerter *SpyBlindAlerter, i int, want ScheduledAlert) {
+	t.Helper()
+
+	if len(blindAlerter.alerts) <= i {
+		t.Fatalf("alert %d was not scheduled %v", i, blindAlerter.alerts)
+	}
+
+	got := blindAlerter.alerts[i]
+	AssertScheduledAlert(t, got, want)
+
+}

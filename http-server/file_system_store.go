@@ -41,7 +41,7 @@ func FileSystemPlayerStoreFromFile(path string) (*FileSystemPlayerStore, func(),
 	}
 
 	closeFunc := func() {
-		db.Close()
+		_ = db.Close()
 	}
 
 	store, err := NewFileSystemPlayerStore(db)
