@@ -1,4 +1,3 @@
-
 package main
 
 import (
@@ -6,7 +5,6 @@ import (
 	"net/http/httptest"
 	"testing"
 )
-
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	database, cleanDatabase := createTempFile(t, `[]`)

@@ -8,12 +8,10 @@ import (
 	"sort"
 )
 
-
 type FileSystemPlayerStore struct {
 	database *json.Encoder
 	league   League
 }
-
 
 func NewFileSystemPlayerStore(file *os.File) (*FileSystemPlayerStore, error) {
 
@@ -34,7 +32,6 @@ func NewFileSystemPlayerStore(file *os.File) (*FileSystemPlayerStore, error) {
 		league:   league,
 	}, nil
 }
-
 
 func (f *FileSystemPlayerStore) GetLeague() League {
 	sort.Slice(f.league, func(i, j int) bool {
@@ -63,12 +60,11 @@ func (f *FileSystemPlayerStore) RecordWin(name string) {
 		f.league = append(f.league, Player{name, 1})
 	}
 
-	f.database.Encode(f.league)
+	_ = f.database.Encode(f.league)
 }
 
-
 func initializePlayerDBFile(file *os.File) error {
-	file.Seek(0, io.SeekStart)
+	_, _ = file.Seek(0, io.SeekStart)
 
 	info, err := file.Stat()
 
@@ -77,8 +73,8 @@ func initializePlayerDBFile(file *os.File) error {
 	}
 
 	if info.Size() == 0 {
-		file.Write([]byte("[]"))
-		file.Seek(0, io.SeekStart)
+		_, _ = file.Write([]byte("[]"))
+		_, _ = file.Seek(0, io.SeekStart)
 	}
 
 	return nil

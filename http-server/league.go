@@ -6,7 +6,6 @@ import (
 	"io"
 )
 
-
 func NewLeague(rdr io.Reader) (League, error) {
 	var league League
 	err := json.NewDecoder(rdr).Decode(&league)
@@ -16,7 +15,6 @@ func NewLeague(rdr io.Reader) (League, error) {
 
 	return league, err
 }
-
 
 type League []Player
 

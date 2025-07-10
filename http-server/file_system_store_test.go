@@ -97,11 +97,11 @@ func createTempFile(t testing.TB, initialData string) (*os.File, func()) {
 		t.Fatalf("could not create temp file %v", err)
 	}
 
-	tmpfile.Write([]byte(initialData))
+	_, _ = tmpfile.Write([]byte(initialData))
 
 	removeFile := func() {
-		tmpfile.Close()
-		os.Remove(tmpfile.Name())
+		_ = tmpfile.Close()
+		_ = os.Remove(tmpfile.Name())
 	}
 
 	return tmpfile, removeFile

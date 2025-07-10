@@ -7,19 +7,16 @@ import (
 	"strings"
 )
 
-
 type Player struct {
 	Name string
 	Wins int
 }
-
 
 type PlayerStore interface {
 	GetPlayerScore(name string) int
 	RecordWin(name string)
 	GetLeague() League
 }
-
 
 type PlayerServer struct {
 	store PlayerStore
@@ -39,7 +36,6 @@ func NewPlayerServer(store PlayerStore) *PlayerServer {
 
 	return p
 }
-
 
 const jsonContentType = "application/json"
 
