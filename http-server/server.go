@@ -55,7 +55,7 @@ func NewPlayerServer(store PlayerStore, game Game) (*PlayerServer, error) {
 }
 
 func (p *PlayerServer) playGame(w http.ResponseWriter, r *http.Request) {
-	p.template.Execute(w, nil)
+	_ = p.template.Execute(w, nil)
 }
 
 var wsUpgrader = websocket.Upgrader{

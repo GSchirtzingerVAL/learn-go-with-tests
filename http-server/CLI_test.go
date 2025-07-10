@@ -22,7 +22,7 @@ type GameSpy struct {
 func (g *GameSpy) Start(numberOfPlayers int, out io.Writer) {
 	g.StartCalled = true
 	g.StartCalledWith = numberOfPlayers
-	out.Write(g.BlindAlert)
+	_, _ = out.Write(g.BlindAlert)
 }
 
 func (g *GameSpy) Finish(winner string) {

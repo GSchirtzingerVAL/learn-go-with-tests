@@ -17,7 +17,7 @@ import (
 
 var (
 	dummyGame = &GameSpy{}
-	tenMS     = 10 * time.Millisecond
+	timeout   = 10 * time.Millisecond
 )
 
 func TestGETPlayers(t *testing.T) {
@@ -132,15 +132,17 @@ func TestGame(t *testing.T) {
 		server := httptest.NewServer(mustMakePlayerServer(t, dummyPlayerStore, game))
 		ws := mustDialWS(t, "ws"+strings.TrimPrefix(server.URL, "http")+"/ws")
 
-		defer server.Close()
-		defer ws.Close()
+		defer func() {
+			server.Close()
+			_ = ws.Close()
+		}()
 
 		writeWSMessage(t, ws, "3")
 		writeWSMessage(t, ws, winner)
 
 		assertGameStartedWith(t, game, 3)
 		assertFinishCalledWith(t, game, winner)
-		within(t, tenMS, func() { assertWebsocketGotMsg(t, ws, wantedBlindAlert) })
+		within(t, timeout, func() { assertWebsocketGotMsg(t, ws, wantedBlindAlert) })
 	})
 }
 
