@@ -1,10 +1,1 @@
-[
-    {
-        "Name": "Bob",
-        "Wins": 2
-    },
-    {
-        "Name": "asd",
-        "Wins": 2
-    }
-]
+[{"Name":"asd","Wins":3},{"Name":"Bob","Wins":2},{"Name":"","Wins":9},{"Name":"asdasdadasd","Wins":1},{"Name":"ger","Wins":1}]

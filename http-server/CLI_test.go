@@ -2,25 +2,32 @@ package poker_test
 
 import (
 	"bytes"
+	"io"
 	"strings"
 	"testing"
+	"time"
 
 	poker "gerrod.com/http-server"
 )
 
 type GameSpy struct {
-	StartCalled  bool
-	StartedWith  int
-	FinishedWith string
+	StartCalled     bool
+	StartCalledWith int
+	BlindAlert      []byte
+
+	FinishedCalled   bool
+	FinishCalledWith string
 }
 
-func (g *GameSpy) Start(numberOfPlayers int) {
+func (g *GameSpy) Start(numberOfPlayers int, out io.Writer) {
 	g.StartCalled = true
-	g.StartedWith = numberOfPlayers
+	g.StartCalledWith = numberOfPlayers
+	out.Write(g.BlindAlert)
 }
 
 func (g *GameSpy) Finish(winner string) {
-	g.FinishedWith = winner
+	g.FinishedCalled = true
+	g.FinishCalledWith = winner
 }
 
 var dummyStdOut = &bytes.Buffer{}
@@ -91,16 +98,36 @@ func assertMessagesSentToUser(t testing.TB, stdout *bytes.Buffer, messages ...st
 
 func assertGameStartedWith(t testing.TB, game *GameSpy, numberOfPlayers int) {
 	t.Helper()
-	if game.StartedWith != numberOfPlayers {
-		t.Errorf("got %d started, want %d", game.StartedWith, numberOfPlayers)
+
+	passed := retryUntil(500*time.Millisecond, func() bool {
+		return game.StartCalledWith == numberOfPlayers
+	})
+
+	if !passed {
+		t.Errorf("got %d started, want %d", game.StartCalledWith, numberOfPlayers)
 	}
 }
 
 func assertFinishCalledWith(t testing.TB, game *GameSpy, winner string) {
 	t.Helper()
-	if game.FinishedWith != winner {
-		t.Errorf("got %q finished, want %q", game.FinishedWith, winner)
+
+	passed := retryUntil(500*time.Millisecond, func() bool {
+		return game.FinishCalledWith == winner
+	})
+
+	if !passed {
+		t.Errorf("expected finish called with %q but got %q", winner, game.FinishCalledWith)
 	}
+}
+
+func retryUntil(d time.Duration, f func() bool) bool {
+	deadline := time.Now().Add(d)
+	for time.Now().Before(deadline) {
+		if f() {
+			return true
+		}
+	}
+	return false
 }
 
 func assertGameNotStarted(t testing.TB, game *GameSpy) {
@@ -112,7 +139,7 @@ func assertGameNotStarted(t testing.TB, game *GameSpy) {
 
 func assertGameNotFinished(t testing.TB, game *GameSpy) {
 	t.Helper()
-	if game.FinishedWith != "" {
+	if game.FinishCalledWith != "" {
 		t.Errorf("game should not have finished")
 	}
 }
